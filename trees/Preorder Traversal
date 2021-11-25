@@ -1,0 +1,103 @@
+Preorder Traversal
+Problem Description
+
+Given a binary tree, return the preorder traversal of its nodes values.
+
+NOTE: Using recursion is not allowed.
+
+
+
+Problem Constraints
+1 <= number of nodes <= 105
+
+
+
+Input Format
+First and only argument is root node of the binary tree, A.
+
+
+
+Output Format
+Return an integer array denoting the preorder traversal of the given binary tree.
+
+
+
+Example Input
+Input 1:
+
+   1
+    \
+     2
+    /
+   3
+Input 2:
+
+   1
+  / \
+ 6   2
+    /
+   3
+
+
+Example Output
+Output 1:
+
+ [1, 2, 3]
+Output 2:
+
+ [1, 6, 2, 3]
+
+
+Example Explanation
+Explanation 1:
+
+ The Preoder Traversal of the given tree is [1, 2, 3].
+Explanation 2:
+
+ The Preoder Traversal of the given tree is [1, 6, 2, 3].
+ 
+ /**
+ * Definition for binary tree
+ * class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) {this.val = x; this.left = this.right = null;}
+ * }
+ */
+ 
+using System.Collections;
+
+class Solution {
+    public List<int> preorderTraversal(TreeNode A) {
+        var l = new List<int>();
+        var s = new Stack<TreeNode>();
+        var t = A;
+        
+        
+        while(s.Count > 0 || t != null)
+        {
+            //if(t != null)
+            //Console.WriteLine(t.val);
+            
+            //Console.WriteLine(s.Count);
+            if(t == null)
+            {
+                //Console.WriteLine("----");
+                var d = s.Pop();
+                t = d.right;
+                 //Console.WriteLine("****");
+                 
+            }
+            else
+            {
+                l.Add(t.val);
+                s.Push(t);
+                t = t.left;
+            }
+            //Console.WriteLine("6666");
+        }
+        return l;
+    }
+    
+}
