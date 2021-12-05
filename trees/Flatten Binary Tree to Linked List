@@ -1,0 +1,129 @@
+Flatten Binary Tree to Linked List
+Problem Description
+
+Given a binary tree A, flatten it to a linked list in-place.
+
+The left child of all nodes should be NULL.
+
+
+
+Problem Constraints
+1 <= size of tree <= 100000
+
+
+
+Input Format
+First and only argument is the head of tree A.
+
+
+
+Output Format
+Return the linked-list after flattening.
+
+
+
+Example Input
+Input 1:
+
+     1
+    / \
+   2   3
+Input 2:
+
+         1
+        / \
+       2   5
+      / \   \
+     3   4   6
+
+
+Example Output
+Output 1:
+
+1
+ \
+  2
+   \
+    3
+Output 2:
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+
+
+Example Explanation
+Explanation 1:
+
+ Tree flattening looks like this.
+Explanation 2:
+
+ Tree flattening looks like this.
+
+
+
+×
+
+
+/**
+ * Definition for binary tree
+ * class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) {this.val = x; this.left = this.right = null;}
+ * }
+ */
+class Solution {
+    public TreeNode flatten(TreeNode A) {
+        return flat(A);
+      
+    }
+    
+    public TreeNode flat(TreeNode A)
+    {
+        
+        var r = A.right;
+        var l = A.left;
+        TreeNode last = null;
+        
+        if(A.left !=null)
+        {
+            last = findLast(A.left);
+            A.left = null;
+            A.right = l;
+            last.right = r;
+        }
+        
+        if(A.right != null)
+        {
+            flat(A.right);
+        }
+        return A;
+        
+    }
+    
+    public TreeNode findLast(TreeNode A)
+    {
+        if(A.right != null)
+        {
+            return findLast(A.right);
+        }
+        else if(A.left != null)
+        {
+            return findLast(A.left);
+        }
+        else
+        {
+            return A;
+        }
+    }
+}
