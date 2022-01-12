@@ -1,0 +1,111 @@
+Edit Distance
+Problem Description
+
+Given two strings A and B, find the minimum number of steps required to convert A to B. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+Insert a character
+Delete a character
+Replace a character
+
+
+Problem Constraints
+1 <= length(A), length(B) <= 450
+
+
+
+Input Format
+The first argument of input contains a string, A.
+The second argument of input contains a string, B.
+
+
+
+Output Format
+Return an integer, representing the minimum number of steps required.
+
+
+
+Example Input
+Input 1:
+
+ A = "abad"
+ B = "abac"
+Input 2:
+
+ A = "Anshuman"
+ B = "Antihuman
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 2
+
+
+Example Explanation
+Exlanation 1:
+
+ A = "abad" and B = "abac"
+ After applying operation: Replace d with c. We get A = B.
+ 
+Explanation 2:
+
+ A = "Anshuman" and B = "Antihuman"
+ After applying operations: Replace s with t and insert i before h. We get A = B.
+ 
+ using System.Text;
+
+class Solution {
+    StringBuilder sb1;
+    StringBuilder sb2;
+    int[,] s;
+    public int minDistance(string A, string B) {
+        sb1 = new StringBuilder(A);
+        sb2 = new StringBuilder(B);
+        int c1 = sb1.Length;
+        int c2 = sb2.Length;
+        
+        s = new int[c1,c2];
+        
+        for(int i=0;i<c1;i++)
+        {
+            for(int j=0;j<c2;j++)
+            {
+                s[i,j] = -1;
+            }
+        }
+        
+        return min(c1-1, c2-1);
+    }
+    
+    public int min(int i1, int i2)
+    {
+        if(i1<0)
+        {
+            return i2+1;
+        }
+        if(i2<0)
+        {
+            return i1+1;
+        }
+        
+        if(s[i1,i2] != -1)
+        {
+            return s[i1,i2];
+        }
+        if(sb1[i1] == sb2[i2])
+        {
+            s[i1,i2] = min(i1-1, i2-1);
+            return s[i1,i2];
+        }
+        else
+        {
+            s[i1,i2] = Math.Min(Math.Min(1 + min(i1, i2-1), 1 + min(i1-1, i2-1)), 1 + min(i1-1, i2));
+            return s[i1,i2];
+        }
+    }
+}
