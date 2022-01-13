@@ -1,0 +1,144 @@
+Regular Expression Match
+Problem Description
+
+Implement wildcard pattern matching with support for ' ? ' and ' * ' for strings A and B.
+
+' ? ' : Matches any single character.
+' * ' : Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+
+
+
+Problem Constraints
+1 <= length(A), length(B) <= 104
+
+
+
+Input Format
+The first argument of input contains a string A.
+The second argument of input contains a string B.
+
+
+
+Output Format
+Return 1 if the patterns match else return 0.
+
+
+
+Example Input
+Input 1:
+
+ A = "aaa"
+ B = "a*"
+Input 2:
+
+ A = "acz"
+ B = "a?a"
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 0
+
+
+Example Explanation
+Explanation 1:
+
+ Since '*' matches any sequence of characters. Last two 'a' in string A will be match by '*'.
+ So, the pattern matches we return 1.
+Explanation 2:
+
+ '?' matches any single character. First two character in string A will be match. 
+ But the last character i.e 'z' != 'a'. Return 0.
+ 
+ using System.Text;
+
+class Solution {
+    StringBuilder sb1;
+    StringBuilder sb2;
+    int[,] s;
+    
+    public int isMatch(string A, string B) {
+        sb1 = new StringBuilder(A);
+        sb2 = new StringBuilder(B);
+        
+        int c1 = sb1.Length;
+        int c2 = sb2.Length;
+        
+        s = new int[c1, c2];
+        
+        for(int i=0;i<c1;i++)
+        {
+            for(int j=0;j<c2;j++)
+            {
+                s[i,j] = -1;
+            }
+        }
+        
+        return reg(c1-1, c2-1);
+        
+    }
+    
+    public int reg(int i1, int i2)
+    {
+        if(i1 < 0)
+        {
+            if(i2< 0 || (i2 == 0 && sb2[i2] == '*'))
+            {
+                return 1;
+            }
+            else
+            {
+                if(sb2[i2] == '*')
+                {
+                    return reg(i1, i2-1);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            
+        }
+        if(i2 < 0)
+        {
+            return 0;
+        }
+        if(s[i1,i2] != -1)
+        {
+            return s[i1,i2];
+        }
+        if(sb1[i1] == sb2[i2])
+        {
+            s[i1,i2] = reg(i1-1, i2-1);
+            return s[i1,i2];
+        }
+        
+        if(sb2[i2] == '*')
+        {
+            if(reg(i1-1, i2) == 1 || reg(i1, i2-1) == 1 || reg(i1-1, i2-1) == 1)
+            {
+                s[i1,i2] = 1;
+            }
+            else
+            {
+                s[i1,i2] =  0;
+            }
+
+            return s[i1,i2];
+        }
+        if(sb2[i2] == '?')
+        {
+            s[i1,i2] = reg(i1-1, i2-1);
+            return s[i1,i2];
+        }
+        
+        s[i1,i2] = 0;
+        
+        return s[i1,i2];
+    }
+}
