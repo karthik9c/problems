@@ -1,0 +1,158 @@
+Palindrome Partitioning II
+Problem Description
+
+Given a string A, partition A such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of A.
+
+
+
+Problem Constraints
+1 <= length(A) <= 501
+
+
+
+Input Format
+The first and the only argument contains the string A.
+
+
+
+Output Format
+Return an integer, representing the minimum cuts needed.
+
+
+
+Example Input
+Input 1:
+
+ A = "aba"
+Input 2:
+
+ A = "aab"
+
+
+Example Output
+Output 1:
+
+ 0
+Output 2:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+ "aba" is already a palindrome, so no cuts are needed.
+Explanation 2:
+
+ Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+
+
+using System.Text;
+
+class Solution {
+    StringBuilder sb1;
+    int[] s;
+    int c;
+    public int minCut(string A) {
+        sb1 = new StringBuilder(A);
+        c = sb1.Length;
+        
+        s = new int[c];
+        
+        for(int i=0;i<c;i++)
+        {
+            s[i] = -1;
+        }
+        
+        return minCuts(c-1);
+    }
+    
+    public int minCuts(int ind)
+    {
+        if(ind <0)
+        {
+            return 0;//int.MaxValue-1;
+        }
+        
+        if(s[ind] != -1)
+        {
+            return s[ind];
+        }
+        if(isPali(0, ind))
+        {
+            s[ind] = 0;
+            return 0;
+        }
+        
+        int ans = int.MaxValue;
+        for(int i=ind;i>=0;i--)
+        {
+            if(isPali(i, ind))
+            {
+                ans = Math.Min(1 + minCuts(i-1), ans);
+            }
+        }
+        
+        s[ind] = ans;
+        return s[ind];
+    }
+    
+    // public int min(int i1, int i2)
+    // {
+    //     if(i1 > i2 || i1<0 || i2 >=c)
+    //     {
+    //         return int.MaxValue-1;
+    //     }
+        
+    //     if(s[i1, i2] != -1)
+    //     {
+    //         return s[i1,i2];
+    //     }
+    //     int c1 = i2-i1+1;
+    //     int m = int.MaxValue;
+        
+    //     if(isPali(i1, i2))
+    //     {
+    //         s[i1, i2] = 0;
+    //         return 0;
+    //     }
+    //     else
+    //     {
+    //         for(int i=0;i<c1-1;i++)
+    //         {
+    //             m = Math.Min(m, 1 + (min(i1, i1+i) + min(i1+i+1, i2)));
+    //         }
+    //     }
+        
+    //     s[i1,i2] = m;
+    //     return m;
+        
+        
+    // }
+    
+    public bool isPali(int i1, int i2)
+    {
+        //int c = i2-i1+1;
+        // for(int i=i1;i<c/2;i++)
+        // {
+        //     if(sb1[i] != sb1[i2-i])
+        //     {
+        //         return false;
+        //     }
+        // }
+        
+        while(i1<i2)
+        {
+            if(sb1[i1] != sb1[i2])
+            {
+                return false;
+            }
+            i1++;
+            i2--;
+        }
+        
+        return true;
+    }
+}
