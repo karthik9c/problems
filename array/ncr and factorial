@@ -1,0 +1,47 @@
+public class Solution {
+    long[] d;
+    public int[][] solve(int A) {
+        d = new long[A+1];
+        
+        for(int i=0;i<=A;i++)
+        {
+            d[i] = -1;
+        }
+        
+        int[][] ans = new int[A][A];
+        
+        for(int i=0;i<A;i++)
+        {
+            int x = i;
+            int ind = 0;
+            while(x>=0)
+            {
+                ans[i][ind] = ncr(i, ind);
+                ind++;
+                x--;
+            }
+        }
+        
+        return ans;
+    }
+    
+    long fact(int n)
+    {
+        if(n == 0 || n== 1)
+        {
+            return 1;
+        }
+        if(d[n] != -1)
+        {
+            return d[n];
+        }
+        d[n] = n * fact(n-1);
+        
+        return d[n];
+    }
+    
+    int ncr(int n, int r)
+    {
+        return (int)(fact(n) / (fact(n-r)*fact(r)));
+    }
+}
