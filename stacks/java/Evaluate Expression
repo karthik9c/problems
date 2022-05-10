@@ -1,0 +1,115 @@
+Evaluate Expression
+Problem Description
+An arithmetic expression is given by a character array A of size N. Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+
+Valid operators are +, -, *, /. Each character may be an integer or an operator.
+
+
+
+Problem Constraints
+1 <= N <= 105
+
+
+
+Input Format
+The only argument given is character array A.
+
+
+
+Output Format
+Return the value of arithmetic expression formed using reverse Polish Notation.
+
+
+
+Example Input
+Input 1:
+    A =   ["2", "1", "+", "3", "*"]
+Input 2:
+    A = ["4", "13", "5", "/", "+"]
+
+
+Example Output
+Output 1:
+    9
+Output 2:
+    6
+
+
+Example Explanation
+Explaination 1:
+    starting from backside:
+    * : () * ()
+    3 : () * (3)
+    + : (() + ()) * (3)
+    1 : (() + (1)) * (3)
+    2 : ((2) + (1)) * (3)
+    ((2) + (1)) * (3) = 9
+Explaination 2:
+    + : () + ()
+    / : () + (() / ())
+    5 : () + (() / (5))
+    13 : () + ((13) / (5))
+    4 : (4) + ((13) / (5))
+    (4) + ((13) / (5)) = 6
+    
+    public class Solution {
+    public int evalRPN(String[] A) {
+        Stack<String> s = new Stack<String>();
+        
+        int i=0;
+        int l = A.length;
+        int ans=0;
+        
+        while(i<l)
+        {
+            // if(s.size()<2)
+            // {
+            //     s.push(A[i]);
+            //     i++;
+            //     continue;
+            // }
+           
+            //System.out.println(A[i]);
+            if(A[i].equals("+") || A[i].equals("-") || A[i].equals("*") || A[i].equals("/"))
+            {
+                //System.out.println(A[i]);
+                int b = Integer.parseInt(s.pop());
+                int a = Integer.parseInt(s.pop());
+                int c=0;
+                 //System.out.println(A[i]);
+                switch(A[i])
+                {
+                    case "+":
+                        c = a +b;
+                        break;
+                    case "*":
+                        c = a *b;
+                        break;
+                    case "-":
+                        c = a -b;
+                        break;
+                    case "/":
+                        c = a /b;
+                        break;
+                        
+                }
+                //System.out.println(c);
+                s.push(Integer.toString(c));
+                ans = c;
+                i++;
+            }
+            else
+            {
+                s.push(A[i]);
+                i++;
+            }
+        }
+        
+        if(s.size()>0)
+        {
+            ans = Integer.parseInt(s.pop());
+        }
+        
+        return ans;
+    }
+}
