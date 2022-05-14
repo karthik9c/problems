@@ -1,0 +1,192 @@
+Largest Rectangle in Histogram
+Problem Description
+Given an array of integers A.
+
+A represents a histogram i.e A[i] denotes the height of the ith histogram's bar. Width of each bar is 1.
+
+Find the area of the largest rectangle formed by the histogram.
+
+
+
+Problem Constraints
+1 <= |A| <= 100000
+
+1 <= A[i] <= 1000000000
+
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+
+Output Format
+Return the area of the largest rectangle in the histogram.
+
+
+
+Example Input
+Input 1:
+
+ A = [2, 1, 5, 6, 2, 3]
+Input 2:
+
+ A = [2]
+
+
+Example Output
+Output 1:
+
+ 10
+Output 2:
+
+ 2
+
+
+Example Explanation
+Explanation 1:
+
+The largest rectangle has area = 10 unit. Formed by A[3] to A[4].
+Explanation 2:
+
+Largest rectangle has area 2.
+
+public class Solution {
+    public int largestRectangleArea(int[] A) {
+        int l = A.length;
+        int[] lps = new int[l];
+        int[] lns = new int[l];
+        
+        lps = ps(A);
+        lns = ns(A);
+        
+        int i=0;
+        int max = Integer.MIN_VALUE;
+        while(i<l)
+        {
+            int min = Integer.MAX_VALUE;
+            int a=0;
+            int b=0;
+            int x=0;
+            int y=0;
+            if(lps[i] == -1)
+            {
+                //a = i+1;
+                x = -1;
+            }
+            else
+            {
+                //a = i-lps[i]+1;
+                x = lps[i];
+            }
+            
+            if(lns[i] == -1)
+            {
+                //b = l-1-i;
+                y = l;
+            }
+            else
+            {
+                b = lns[i]-i;
+                y = lns[i];
+            }
+            //min = Math.min(x, y);
+            //int ans = (a+b)*min;
+            //System.out.println(A[i]+"-"+x+"-"+y);
+            //////max = Math.max(ans,max);
+            //max = Math.max(a*x,max);
+            max = Math.max((y-x-1)*A[i],max);
+            i++;
+        }
+        
+        return max;
+    }
+    
+    int[] ps(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=0;
+        
+        while(i<l)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i++;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] < A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i++;
+            
+            
+        }
+        return ans;
+    }
+    
+    int[] ns(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=l-1;
+        
+        while(i>=0)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i--;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] < A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i--;
+            
+            
+        }
+        return ans;
+    }
+}
