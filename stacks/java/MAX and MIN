@@ -1,0 +1,307 @@
+MAX and MIN
+Problem Description
+Given an array of integers A.
+
+value of a array = max(array) - min(array).
+
+Calculate and return the sum of values of all possible subarrays of A modulo 109+7.
+
+
+
+Problem Constraints
+1 <= |A| <= 100000
+
+1 <= A[i] <= 1000000
+
+
+
+Input Format
+The first and only argument given is the integer array A.
+
+
+
+Output Format
+Return the sum of values of all possible subarrays of A modulo 109+7.
+
+
+
+Example Input
+Input 1:
+
+ A = [1]
+Input 2:
+
+ A = [4, 7, 3, 8]
+
+
+Example Output
+Output 1:
+
+ 0
+Output 2:
+
+ 26
+
+
+Example Explanation
+Explanation 1:
+
+Only 1 subarray exists. Its value is 0.
+Explanation 2:
+
+value ( [4] ) = 4 - 4 = 0
+value ( [7] ) = 7 - 7 = 0
+value ( [3] ) = 3 - 3 = 0
+value ( [8] ) = 8 - 8 = 0
+value ( [4, 7] ) = 7 - 4 = 3
+value ( [7, 3] ) = 7 - 3 = 4
+value ( [3, 8] ) = 8 - 3 = 5
+value ( [4, 7, 3] ) = 7 - 3 = 4
+value ( [7, 3, 8] ) = 8 - 3 = 5
+value ( [4, 7, 3, 8] ) = 8 - 3 = 5
+sum of values % 10^9+7 = 26
+
+public class Solution {
+    public int solve(int[] A) {
+        long m = 1000000000+7;
+        long max =0;
+        long min = 0;
+        int l = A.length;
+        
+        int i=0;
+        int[] lpg = pg(A);
+        int[] lng = ng(A);
+        int[] lps = ps(A);
+        int[] lns = ns(A);
+        
+        while(i<l)
+        {
+            int a =1;
+            int b = 1;
+            int c =1;
+            int d = 1;
+            if(lpg[i] ==-1)
+            {
+                a = i+1;
+                
+            }
+            else
+            {
+                a = i-lpg[i];
+            }
+            if(lng[i] ==-1)
+            {
+                b = l-i;
+                
+            }
+            else
+            {
+                b = lng[i]-i;
+                //System.out.println(lng[i]+"i"+i);
+            }
+            
+            if(lps[i] ==-1)
+            {
+                c = i+1;
+                
+            }
+            else
+            {
+                c = i-lps[i];
+            }
+            if(lns[i] ==-1)
+            {
+                d = l-i;
+                
+            }
+            else
+            {
+                d = lns[i]-i;
+            }
+            //System.out.println(a+"-"+b+"-"+c+"-"+d);
+            long x = ((((A[i]%m)*(a%m))%m)*(b%m))%m;
+            max = (max%m + x%m)%m;
+            long y = ((((A[i]%m)*(c%m))%m)*(d%m))%m;
+            min=(min%m + y%m)%m;
+            i++;
+        }
+        //System.out.println(min);
+       return (int)((max-min+m)%m);
+    }
+    
+    int[] pg(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=0;
+        
+        while(i<l)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i++;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] > A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i++;
+            
+            
+        }
+        return ans;
+    }
+    
+    int[] ng(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=l-1;
+        
+        while(i>=0)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i--;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] > A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i--;
+
+        }
+                    
+            return ans;
+    }
+    
+    int[] ps(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=0;
+        
+        while(i<l)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i++;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] < A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i++;
+            
+            
+        }
+        return ans;
+    }
+    
+    int[] ns(int[] A)
+    {
+        Stack<Integer> s = new Stack<Integer>();
+        int l = A.length;
+        int[] ans = new int[l];
+        
+        int i=l-1;
+        
+        while(i>=0)
+        {
+            if(s.size()==0)
+            {
+                ans[i] = -1;
+                s.push(i);
+                i--;
+                continue;
+            }
+            
+            while(s.size() >= 0)
+            {
+                if(s.size()==0)
+                {
+                    ans[i] = -1;
+                    s.push(i);
+                    break;
+                }
+                if(A[s.peek()] < A[i])
+                {
+                    ans[i] = (s.peek());
+                    s.push(i);
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            i--;
+            
+            
+        }
+        return ans;
+    }
+}
