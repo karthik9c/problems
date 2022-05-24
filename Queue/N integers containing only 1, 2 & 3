@@ -1,0 +1,112 @@
+N integers containing only 1, 2 & 3
+Problem Description
+Given an integer, A. Find and Return first positive A integers in ascending order containing only digits 1, 2, and 3.
+
+NOTE: All the A integers will fit in 32-bit integers.
+
+
+
+Problem Constraints
+1 <= A <= 29500
+
+
+
+Input Format
+The only argument given is integer A.
+
+
+
+Output Format
+Return an integer array denoting the first positive A integers in ascending order containing only digits 1, 2 and 3.
+
+
+
+Example Input
+Input 1:
+
+ A = 3
+Input 2:
+
+ A = 7
+
+
+Example Output
+Output 1:
+
+ [1, 2, 3]
+Output 2:
+
+ [1, 2, 3, 11, 12, 13, 21]
+
+
+Example Explanation
+Explanation 1:
+
+ Output denotes the first 3 integers that contains only digits 1, 2 and 3.
+Explanation 2:
+
+ Output denotes the first 3 integers that contains only digits 1, 2 and 3.
+ 
+ public class Solution {
+    public int[] solve(int A) {
+        Queue<Integer> q = new LinkedList<Integer>();
+        int[] ans = new int[A];
+        q.add(1);
+        
+        //if()
+        //ans[0] = 1;
+        q.add(2);
+        //ans[1] = 2;
+        q.add(3);
+        //ans[2] = 3;
+        
+        for(int i=0;i<3;i++)
+        {
+            if(i<A)
+            {
+                //System.out.println(A+"r");
+                //System.out.println(i);
+                ans[i] = i+1;
+            }
+            
+        }
+        
+        if(A<=3)
+        {
+            return ans;
+        }
+        
+        int k =3;
+        boolean skip = false;
+        
+        while(q.size()>0 && k<A)
+        {
+            int y = q.remove();
+            String s = Integer.toString(y);
+            //k++;
+            
+            for(int i=1;i<=3;i++)
+            {
+                String t = s + i;
+                int z = Integer.parseInt(t);
+                
+                if(k>=A)
+                {
+                    skip = true;
+                    break;
+                }
+                //System.out.println(k+"-"+z);
+                ans[k] = z;
+                k++;
+                q.add(Integer.parseInt(t));
+            }
+            
+            if(skip)
+            {
+                break;
+            }
+        }
+        
+        return ans;
+    }
+}
