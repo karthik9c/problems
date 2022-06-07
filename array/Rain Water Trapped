@@ -1,0 +1,86 @@
+Rain Water Trapped
+Problem Description
+Given a vector A of non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
+
+
+
+Problem Constraints
+1 <= |A| <= 100000
+
+
+
+Input Format
+First and only argument is the vector A
+
+
+
+Output Format
+Return one integer, the answer to the question
+
+
+
+Example Input
+Input 1:
+
+A = [0, 1, 0, 2]
+Input 2:
+
+A = [1, 2]
+
+
+Example Output
+Output 1:
+
+1
+Output 2:
+
+0
+
+
+Example Explanation
+Explanation 1:
+
+1 unit is trapped on top of the 3rd element.
+Explanation 2:
+
+No water is trapped.
+
+public class Solution {
+    // DO NOT MODIFY THE ARGUMENTS WITH "final" PREFIX. IT IS READ ONLY
+    public int trap(final int[] A) {
+        int len = A.length;
+        
+        int[] l = new int[len];
+        int[] r = new int[len];
+        
+        int lmax = A[0];
+        int rmax = A[len-1];
+        
+        int ans = 0;
+        
+        for(int i=0;i<len;i++)
+        {
+            lmax = Math.max(lmax, A[i]);
+            l[i] = lmax;
+        }
+        
+        for(int i=len-1;i>=0;i--)
+        {
+            rmax = Math.max(rmax, A[i]);
+            r[i] = rmax;
+        }
+        
+        for(int i=0;i<len;i++)
+        {
+            int tmin = Math.min(l[i], r[i]);
+            
+            if(A[i] < tmin)
+            {
+                ans += (tmin - A[i]);
+            }
+            
+        }
+        
+        return ans;
+    }
+}
