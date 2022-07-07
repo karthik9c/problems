@@ -53,3 +53,59 @@ Example Explanation
 Explanation 1:
 
  Create the binary tree and return the root node of the tree.
+/**
+ * Definition for binary tree
+ * class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) {
+ *      val = x;
+ *      left=null;
+ *      right=null;
+ *     }
+ * }
+ */
+public class Solution {
+    HashMap<Integer, Integer> h = new HashMap<>();
+    public TreeNode buildTree(int[] A, int[] B) {
+        //HashMap<Integer, Integer> h = new HashMap<>();
+        
+        for(int i=0;i<A.length;i++)
+        {
+            h.put(A[i], i);
+        }
+        
+        return build(0, A.length-1, A, B);
+    }
+    
+    public TreeNode build(int s, int e, int[] A, int[] B)
+    {
+        //System.out.println(s+"-"+e);
+        if(s == e)
+        {
+            return new TreeNode(B[s]);
+        }
+        if(s>e)
+        {
+            return null;
+        }
+        
+        int mini = Integer.MAX_VALUE;
+        int ti=s;
+        for(int i=s;i<=e;i++)
+        {
+            if(h.get(B[i]) < mini)
+            {
+                mini = h.get(B[i]);
+                ti = i;
+            }
+
+        }
+        TreeNode t = new TreeNode(B[ti]);
+        t.left = build(s, ti-1, A, B);
+        t.right = build(ti+1, e, A, B);
+        
+        return t;
+    }
+}
