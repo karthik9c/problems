@@ -1,0 +1,163 @@
+Maximum XOR
+Problem Description
+Given an array of integers A, find and return the maximum result of A[i] XOR A[j], where i, j are the indexes of the array.
+
+
+
+Problem Constraints
+1 <= length of the array <= 100000
+0 <= A[i] <= 109
+
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+
+Output Format
+Return an integer denoting the maximum result of A[i] XOR A[j].
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 2, 3, 4, 5]
+Input 2:
+
+ A = [5, 17, 100, 11]
+
+
+Example Output
+Output 1:
+
+ 7
+Output 2:
+
+ 117
+
+
+Example Explanation
+Explanation 1:
+
+ Maximum XOR occurs between element of indicies(0-based) 1 and 4 i.e. 2 ^ 5 = 7.
+Explanation 2:
+
+ Maximum XOR occurs between element of indicies(0-based) 1 and 2 i.e. 17 ^ 100 = 117.
+
+class TrieNode
+{
+    TrieNode()
+    {
+        binary = new TrieNode[2];
+    }
+    int c;
+    TrieNode[] binary;
+    boolean isend;
+}
+
+public class Solution {
+    public int solve(int[] A) {
+        int l = A.length;
+        if(l == 1)
+        {
+            return A[0];
+        }
+        TrieNode root = new TrieNode();
+        int ans = Integer.MIN_VALUE;
+        insert(root, A[0]);
+        for(int i=1;i<l;i++)
+        {
+            ans = Math.max(maxxor(root, A[i]), ans);
+            
+            insert(root, A[i]);
+        }
+        
+        return ans;
+        //insert(root, A[0]);
+        
+        
+    }
+    
+    void insert(TrieNode root, int num)
+    {
+        TrieNode current = root;
+        for(int i=31;i>=0;i--)
+        {
+            int tb = (num >> i) & 1;
+             //System.out.println(i+"tb:::"+tb);
+            if(tb == 1)
+            {
+                if(current.binary[1] == null)
+                {
+                    current.binary[1] = new TrieNode();
+                     //System.out.println(i+"build:::1");
+                    if(i == 0)
+                    {
+                        current.binary[1].isend = true;
+                    }
+                }
+                current = current.binary[1];
+            }
+            else
+            {
+                if(current.binary[0] == null)
+                {
+                    current.binary[0] = new TrieNode();
+                    //System.out.println(i+"build:::0");
+                    if(i == 0)
+                    {
+                        current.binary[0].isend = true;
+                    }
+                }
+                current = current.binary[0];
+            }
+        }
+    }
+    
+    int maxxor(TrieNode root, int num)
+    {
+        TrieNode current = root;
+        int ans=0;
+       for(int i=31;i>=0;i--)
+       {
+           int tb = (num >> i) & 1;
+           
+           if(tb == 1)
+           {
+               if(current.binary[0] != null)
+               {
+                   //System.out.println(ans + ":::10");
+                   current = current.binary[0];
+               }
+               else
+               {
+                   
+                   ans += 1 << i;
+                   //System.out.println(ans + ":::11");
+                   current = current.binary[1];
+                   
+               }
+           }
+           else
+           {
+               if(current.binary[1] != null)
+               {
+                   current = current.binary[1];
+                   ans += 1 << i;
+                   //System.out.println(ans + ":::01");
+               }
+               else
+               {
+                    //System.out.println(ans + ":::00");
+                   current = current.binary[0];
+               }
+           }
+           
+       }
+       int res = ans ^ num;
+       //System.out.println(ans + "-"+ num + "-" + res);
+        return res;
+    }
+}
