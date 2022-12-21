@@ -1,0 +1,102 @@
+Problem Description
+Given two strings A and B, find the minimum number of steps required to convert A to B. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+Insert a character
+Delete a character
+Replace a character
+
+
+Problem Constraints
+1 <= length(A), length(B) <= 450
+
+
+
+Input Format
+The first argument of input contains a string, A.
+The second argument of input contains a string, B.
+
+
+
+Output Format
+Return an integer, representing the minimum number of steps required.
+
+
+
+Example Input
+Input 1:
+
+ A = "abad"
+ B = "abac"
+Input 2:
+
+ A = "Anshuman"
+ B = "Antihuman
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 2
+
+
+Example Explanation
+Exlanation 1:
+
+ A = "abad" and B = "abac"
+ After applying operation: Replace d with c. We get A = B.
+ 
+Explanation 2:
+
+ A = "Anshuman" and B = "Antihuman"
+ After applying operations: Replace s with t and insert i before h. We get A = B.
+ 
+ public class Solution {
+    int[][] dp;
+    public int minDistance(String A, String B) {
+        int l1 = A.length();
+        int l2 = B.length();
+
+        dp = new int[l1+1][l2+1];
+        for(int i=0;i<=l1;i++)
+        {
+            for(int j=0;j<=l2;j++)
+            {
+                dp[i][j] = -1;
+            }
+        }
+
+        return m(A, B, l1, l2);
+    }
+
+    int m(String A, String B, int l1, int l2)
+    {
+        if(l1 ==0)
+        {
+            return l2;
+        }
+        if(l2 == 0)
+        {
+            return l1;
+        }
+        if(dp[l1][l2] != -1)
+        {
+            return dp[l1][l2];
+        }
+        if(A.charAt(l1-1) == B.charAt(l2-1))
+        {
+            dp[l1][l2] = m(A, B, l1-1, l2-1);
+        }
+        else
+        {
+            int x = Math.min(m(A, B, l1, l2-1), m(A, B, l1-1, l2));
+            dp[l1][l2] = 1 + Math.min(x, m(A, B, l1-1, l2-1));                                                                                                                                                                                                                                 
+        }
+
+        return dp[l1][l2];
+    }
+}
