@@ -1,0 +1,73 @@
+public class Solution {
+    boolean[][] palidp;
+    boolean[][] isCal;
+    int[] dp;
+    public int minCut(String A) {
+        int l = A.length();
+        dp = new int[l];
+        palidp = new boolean[l][l];
+        isCal = new boolean[l][l];
+
+        for(int i=0;i<l;i++)
+        {
+            dp[i] = -1;
+        }
+
+        return minC(A, l-1);
+
+    }
+
+    int minC(String A, int e)
+    {
+        if(dp[e] != -1)
+        {
+            return dp[e];
+        }
+        if(isPali(A, 0, e))
+        {
+            dp[e] = 0;
+            return dp[e];
+        }
+        
+        int min = Integer.MAX_VALUE;
+        for(int i=e;i>0;i--)
+        {
+            if(isPali(A, i, e))
+            {
+               min = Math.min(minC(A, i-1) + 1, min);
+            }
+        }
+
+            dp[e] = min;
+            return dp[e];
+    }
+
+    boolean isPali(String A, int i1, int i2)
+    {
+
+        if(i1 >= i2)
+        {
+            return true;
+        }
+
+        //System.out.println(i1 + "-" + i2);
+        if(isCal[i1][i2])
+        {
+            return palidp[i1][i2];
+        }
+        int l = A.length();
+
+        if(A.charAt(i1) == A.charAt(i2))
+        {
+            palidp[i1][i2] = isPali(A, i1+1, i2-1);
+            isCal[i1][i2] = true;
+        }
+        else
+        {
+            palidp[i1][i2] = false;
+            isCal[i1][i2] = true;
+        }
+
+        return palidp[i1][i2];
+    }
+}
