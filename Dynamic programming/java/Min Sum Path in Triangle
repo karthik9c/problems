@@ -1,0 +1,105 @@
+Problem Description
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+Adjacent numbers for jth number of row i is jth and (j+1)th numbers of row i+1 is
+
+
+
+Problem Constraints
+|A| <= 1000
+
+A[i] <= 1000
+
+
+
+Input Format
+First and only argument is the vector of vector A defining the given triangle
+
+
+
+Output Format
+Return the minimum sum
+
+
+
+Example Input
+Input 1:
+
+ 
+A = [ 
+         [2],
+        [3, 4],
+       [6, 5, 7],
+      [4, 1, 8, 3]
+    ]
+Input 2:
+
+ A = [ [1] ]
+
+
+Example Output
+Output 1:
+
+ 11
+Output 2:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+ The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+Explanation 2:
+
+ Only 2 can be collected.
+ 
+ public class Solution {
+    ArrayList<ArrayList<Integer>> dp;
+	public int minimumTotal(ArrayList<ArrayList<Integer>> a) {
+        int r = a.size();
+        dp = new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<r;i++)
+        {
+            ArrayList<Integer> t = new ArrayList<Integer>();
+            for(int j=0;j<a.get(i).size();j++)
+            {
+                t.add(-1);
+            }
+            dp.add(t);
+
+        }
+        return mini(a, 0, 0);
+
+	}
+
+    public int mini(ArrayList<ArrayList<Integer>> a, int ind, int currentrow)
+    {
+        if(currentrow >= a.size() || ind >= a.get(currentrow).size())
+        {
+            return Integer.MAX_VALUE;
+        }
+        if(currentrow == a.size()-1)
+        {
+            dp.get(currentrow).set(ind, a.get(currentrow).get(ind));
+            return dp.get(currentrow).get(ind);
+        }
+        if(dp.get(currentrow).get(ind) != -1)
+        {
+            return dp.get(currentrow).get(ind);
+        }
+        int min = Integer.MAX_VALUE;
+        int jth = mini(a, ind, currentrow + 1);
+        int joneth = mini(a, ind +1, currentrow +1);
+//System.out.println(currentrow + "-"+ ind + "-" + jth + "-" + joneth);
+        if(jth == Integer.MAX_VALUE && joneth == Integer.MAX_VALUE)
+        {
+            return jth;
+        }
+        min = Math.min(min, Math.min(jth, joneth));
+        //System.out.println(currentrow + "-"+ ind + min);
+        dp.get(currentrow).set(ind, a.get(currentrow).get(ind) + min);
+
+        return dp.get(currentrow).get(ind);
+    }
+}
