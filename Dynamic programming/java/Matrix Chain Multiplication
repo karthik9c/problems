@@ -1,0 +1,115 @@
+Problem Description
+Given an array of integers A representing chain of 2-D matices such that the dimensions of ith matrix is A[i-1] x A[i].
+
+Find the most efficient way to multiply these matrices together. The problem is not actually to perform the multiplications, but merely to decide in which order to perform the multiplications.
+
+Return the minimum number of multiplications needed to multiply the chain.
+
+
+
+Problem Constraints
+1 <= length of the array <= 1000
+1 <= A[i] <= 100
+
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+
+Output Format
+Return an integer denoting the minimum number of multiplications needed to multiply the chain.
+
+
+
+Example Input
+Input 1:
+
+ A = [40, 20, 30, 10, 30]
+Input 2:
+
+ A = [10, 20, 30]
+
+
+Example Output
+Output 1:
+
+ 26000
+Output 2:
+
+ 6000
+
+
+Example Explanation
+Explanation 1:
+
+ Dimensions of A1 = 40 x 20
+ Dimensions of A2 = 20 x 30
+ Dimensions of A3 = 30 x 10
+ Dimensions of A4 = 10 x 30
+ First, multiply A2 and A3 ,cost = 20*30*10 = 6000
+ Second, multilpy A1 and (Matrix obtained after multilying A2 and A3) =  40 * 20 * 10 = 8000
+ Third, multiply (Matrix obtained after multiplying A1, A2 and A3) and A4 =  40 * 10 * 30 = 12000
+ Total Cost = 12000 + 8000 + 6000 =26000
+Explanation 2:
+
+ Cost to multiply two matrices with dimensions 10 x 20 and 20 x 30 = 10 * 20 * 30 = 6000.
+ 
+ public class Solution {
+    int[][] dp;
+    public int solve(int[] A) {
+        dp = new int[A.length][A.length];
+
+        for(int i=0;i<A.length;i++)
+        {
+            for(int j=0;j<A.length;j++)
+            {
+                dp[i][j] = -1;
+            }
+            
+        }
+        return m(0, A.length-1, A);
+    }
+
+    public int m(int l1, int l2, int[] A)
+    {
+        if(l2-l1 <1)
+        {
+            return 0;
+        }
+        if(dp[l1][l2] != -1)
+        {
+            return dp[l1][l2];
+        }
+        if(l2-l1 == 1)
+        {
+            //System.out.println(l1+"-"+ l2+"-1");
+            dp[l1][l2] = 0;
+            return dp[l1][l2];
+
+        }
+        if(l2-l1 == 2)
+        {
+            
+
+            dp[l1][l2] = A[l1]*A[l1+1]*A[l1+2];
+            //System.out.println(l1+"-"+ l2+"-"+dp[l1][l2] );
+            return dp[l1][l2];
+
+        }
+        int min = Integer.MAX_VALUE;
+        for(int i=l1+1;i<l2;i++)
+        {
+            int p1 = m(l1, i, A);
+            int p2 = m(i, l2, A);
+            int c = (p1 + p2) +( A[l1] * A[l2] * A[i]);
+            //System.out.println(l1+"-"+ l2+"-"+p1+"-"+p2+"-"+ c);
+            min = Math.min(c, min);
+            
+        }
+        dp[l1][l2] = min;
+        return dp[l1][l2];
+    }
+}
+
